@@ -1,0 +1,6 @@
+--require ./test/testSetup.js
+--reporter spec
+--ui bdd
+--recursive
+--colors
+--timeout 60000
