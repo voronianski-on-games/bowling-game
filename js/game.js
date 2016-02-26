@@ -43,18 +43,12 @@
                 var nextNextFrameInGame = frames[frameIndex+1];
                 if (nextNextFrameInGame) {
                     secondRollAfterResult = nextNextFrameInGame.getRollByIndex(1);
-                    var bonus = firstRollAfterResult + secondRollAfterResult;
-                    strikeFrame.addBonus(bonus);
+                    strikeFrame.addBonus(firstRollAfterResult + secondRollAfterResult);
                 }
             } else {
                 secondRollAfterResult = nextFrameInGame.getRollByIndex(2);
-                var bonus = firstRollAfterResult + secondRollAfterResult;
-                strikeFrame.addBonus(bonus);
+                strikeFrame.addBonus(firstRollAfterResult + secondRollAfterResult);
             }
-
-            // console.log(firstRollAfterResult, secondRollAfterResult, bonus)
-            // if (bonus) {
-            // }
         };
 
         privateMethods.updateFramesBonusPoints = function () {
