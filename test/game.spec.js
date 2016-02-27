@@ -119,13 +119,51 @@ describe('game module', function () {
             expect(game.getTotalScore()).to.equal(45);
         });
 
-        it('should support last frame of the game', function () {
-            rollMany(9, 0);
+        it('should support basic last frame of the game', function () {
+            rollMany(18, 0);
+            expect(game.getTotalScore()).to.equal(0);
+            game.roll(1);
+            game.roll(2);
+            expect(game.getTotalScore()).to.equal(3);
+            expect(game.isFinished()).to.equal(true);
+            game.roll(5);
+            expect(game.getTotalScore()).to.equal(3);
+        });
+
+        it('should support spare at last frame of the game', function () {
+            rollMany(18, 0);
             expect(game.getTotalScore()).to.equal(0);
             rollSpare();
             expect(game.getTotalScore()).to.equal(10);
+            expect(game.isFinished()).to.equal(false);
             game.roll(1);
             expect(game.getTotalScore()).to.equal(11);
+            expect(game.isFinished()).to.equal(true);
+            game.roll(5);
+            expect(game.getTotalScore()).to.equal(11);
+        });
+
+        it('should support strike at last frame of the game', function () {
+            rollMany(18, 0);
+            expect(game.getTotalScore()).to.equal(0);
+            rollStrike();
+            expect(game.getTotalScore()).to.equal(10);
+            expect(game.isFinished()).to.equal(false);
+            game.roll(1);
+            expect(game.getTotalScore()).to.equal(11);
+            expect(game.isFinished()).to.equal(false);
+            game.roll(1);
+            expect(game.getTotalScore()).to.equal(12);
+            expect(game.isFinished()).to.equal(true);
+            game.roll(5);
+            expect(game.getTotalScore()).to.equal(12);
+        });
+
+        it('should mark 10th frame as last', function () {
+            rollMany(18, 0);
+            expect(game.getFrame().isLast()).to.equal(false);
+            game.roll(5);
+            expect(game.getFrame().isLast()).to.equal(true);
         });
 
         it('should calculate proper gutter result', function () {
@@ -136,6 +174,17 @@ describe('game module', function () {
         it('should calculate proper best result', function () {
             rollMany(12, 10);
             expect(game.getTotalScore()).to.equal(300);
+        });
+
+        it('should be able to make random roll', function () {
+            game.randomRoll();
+            expect(game.getFrame().getRollByIndex(1)).to.be.within(0, 10);
+        });
+
+        it('should have random roll with proper max range', function () {
+            game.roll(9);
+            game.randomRoll();
+            expect(game.getFrame().getRollByIndex(2)).to.be.within(0, 1);
         });
     });
 });

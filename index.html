@@ -3,8 +3,20 @@
 <head>
     <meta charset="utf-8">
     <title>Bowling Game Puzzle - (c) Dmitri Voronianski http://github.com/voronianski</title>
+    <link rel="stylesheet" href="css/vendor/normalize.min.css">
+    <link rel="stylesheet" href="css/vendor/basscss.min.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+    <div class="vd-container mx-auto center">
+        <div id="app"></div>
+    </div>
 
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        var app = VDApp({el: '#app'});
+        app.render();
+    </script>
 </body>
 </html>

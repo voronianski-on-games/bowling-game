@@ -1,10 +1,12 @@
 (function (root) {
     'use strict';
 
+    var MAX_FRAMES = 10;
+    var MAX_PINS = 10;
+
     function VDGame (handlers) {
         handlers = handlers || {};
 
-        var maxFrames = 10;
         var currentFrame = VDGameFrame(1);
         var frames = [currentFrame];
 
@@ -13,7 +15,7 @@
 
         privateMethods.nextFrame = function () {
             var nextFrameIndex = frames.length+1;
-            if (currentFrame.isFinished() && nextFrameIndex <= maxFrames) {
+            if (currentFrame.isFinished() && nextFrameIndex <= MAX_FRAMES) {
                 currentFrame = VDGameFrame(nextFrameIndex);
                 frames.push(currentFrame);
             }
@@ -69,6 +71,11 @@
             });
         };
 
+        publicMethods.isFinished = function () {
+            var finshedFramesCount = frames.length;
+            return finshedFramesCount === 10 && frames[finshedFramesCount-1].isFinished();
+        };
+
         publicMethods.getFrame = function (frameIndex) {
             return frames[frameIndex > 0 ? frameIndex-1 : frames.length-1];
         };
@@ -86,7 +93,8 @@
         };
 
         publicMethods.randomRoll = function () {
-            // currentFrame.randomRoll(); ?
+            var pins = Math.floor(Math.random() * (currentFrame.getLeftPins() + 1));
+            publicMethods.roll(pins);
         };
 
         return publicMethods;
@@ -95,9 +103,8 @@
     function VDGameFrame (index) {
         index = index || 1;
 
-        var leftPins = 10;
+        var leftPins = MAX_PINS;
         var rolls = [];
-        var maxRolls = index === 10 ? 3 : 2;
         var spare = false;
         var strike = false;
         var bonus = 0;
@@ -105,7 +112,12 @@
         var publicMethods = {};
 
         publicMethods.isFinished = function () {
-            return strike || maxRolls === rolls.length;
+            var rollsCount = rolls.length;
+            if (publicMethods.isLast()) {
+                return rollsCount === 3 || rollsCount === 2 && publicMethods.getTotalScore() < 10;
+            } else {
+                return strike || rollsCount === 2;
+            }
         };
 
         publicMethods.isStrike = function () {
@@ -136,6 +148,10 @@
             return rolls[index-1];
         };
 
+        publicMethods.isLast = function () {
+            return index === 10;
+        };
+
         publicMethods.getLeftPins = function () {
             return leftPins;
         };
@@ -158,17 +174,17 @@
 
             var doneRolls = rolls.length+1;
             if (doneRolls === 1 && leftPins === 0) {
-                if (index < 10) {
-                    strike = true;
-                } else {
+                if (publicMethods.isLast()) {
                     leftPins += 10;
+                } else {
+                    strike = true;
                 }
             }
             if (doneRolls === 2 && leftPins === 0) {
-                if (index < 10) {
-                    spare = true;
-                } else {
+                if (publicMethods.isLast()) {
                     leftPins += 10;
+                } else {
+                    spare = true;
                 }
             }
 
@@ -177,6 +193,9 @@
 
         return publicMethods;
     }
+
+    VDGame.MAX_FRAMES = MAX_FRAMES;
+    VDGame.MAX_PINS = MAX_PINS;
 
     root.VDGame = VDGame;
 
