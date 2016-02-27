@@ -2,6 +2,8 @@
 
 [![build status](http://img.shields.io/travis/voronianski/bowling-game.svg?style=flat)](https://travis-ci.org/voronianski/bowling-game)
 
+<img src="https://raw.githubusercontent.com/voronianski/bowling-game/master/demo.gif" width="600" />
+
 ## Usage
 
 Open `index.html` in your favorite browser.
