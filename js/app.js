@@ -173,9 +173,10 @@
             for (var i = 0, len = VDGame.MAX_PINS; i <= len; i++) {
                 var $pinBtn = document.createElement('button');
                 $pinBtn.type = 'button';
-                $pinBtn.className = 'btn btn-outline h6 mt2 mr1 fuchsia';
+                $pinBtn.className = 'btn btn-outline h6 mt2 mb2 mr1 fuchsia';
                 $pinBtn.textContent = i;
-                if (i > game.getFrame().getLeftPins()) {
+                var leftPins = game.getFrame().getLeftPins();
+                if (game.isFinished() || i > leftPins) {
                     $pinBtn.disabled = true;
                 }
                 $pinBtn.addEventListener('click', privateMethods.onPinClick.bind(null, i), false);
@@ -184,7 +185,7 @@
 
             var $rollBtn = document.createElement('button');
             $rollBtn.type = 'button';
-            $rollBtn.className = 'btn btn-primary mt2 mr1 bg-fuchsia';
+            $rollBtn.className = 'btn btn-primary mt2 mb2 mr1 bg-fuchsia';
             $rollBtn.textContent = 'Random roll';
             if (game.isFinished()) {
                 $rollBtn.disabled = true;
@@ -194,7 +195,7 @@
 
             var $restartBtn = document.createElement('button');
             $restartBtn.type = 'button';
-            $restartBtn.className = 'btn btn-outline mt2 fuchsia';
+            $restartBtn.className = 'btn btn-outline mt2 mb2 fuchsia';
             $restartBtn.textContent = 'Restart?';
             $restartBtn.addEventListener('click', privateMethods.onRestartClick, false);
             domFragment.appendChild($restartBtn)
