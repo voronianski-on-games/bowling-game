@@ -39,7 +39,7 @@ describe('game module', function () {
             expect(game.getFrame().getIndex()).to.equal(1);
             game.roll(2);
             game.roll(1);
-            expect(game.getFrame().getIndex()).to.equal(1);
+            expect(game.getFrame().getIndex()).to.equal(2);
             game.roll(3);
             expect(game.getFrame().getIndex()).to.equal(2);
         });
@@ -54,9 +54,9 @@ describe('game module', function () {
         it('should count pins left for each roll in frame', function () {
             game.roll(1);
             game.roll(4);
-            expect(game.getFrame().getLeftPins()).to.equal(5);
+            expect(game.getFrame(1).getLeftPins()).to.equal(5);
             game.roll(9);
-            expect(game.getFrame().getLeftPins()).to.equal(1);
+            expect(game.getFrame(2).getLeftPins()).to.equal(1);
         });
 
         it('should not allow to roll more pins than possible in frame', function () {
@@ -76,7 +76,7 @@ describe('game module', function () {
             game.roll(1);
             expect(game.getFrame().isSpare()).to.equal(false);
             game.roll(9);
-            expect(game.getFrame().isSpare()).to.equal(true);
+            expect(game.getFrame(2).isSpare()).to.equal(true);
         });
 
         it('should mark frame as strike when necessary', function () {
@@ -85,7 +85,7 @@ describe('game module', function () {
             game.roll(4);
             expect(game.getFrame().isStrike()).to.equal(false);
             rollStrike();
-            expect(game.getFrame().isStrike()).to.equal(true);
+            expect(game.getFrame(2).isStrike()).to.equal(true);
         });
 
         it('should calculate bonus total score based on spare', function () {
@@ -160,8 +160,10 @@ describe('game module', function () {
         });
 
         it('should mark 10th frame as last', function () {
-            rollMany(18, 0);
+            rollMany(16, 0);
             expect(game.getFrame().isLast()).to.equal(false);
+            rollSpare();
+            expect(game.getFrame().isLast()).to.equal(true);
             game.roll(5);
             expect(game.getFrame().isLast()).to.equal(true);
         });
@@ -184,7 +186,7 @@ describe('game module', function () {
         it('should have random roll with proper max range', function () {
             game.roll(9);
             game.randomRoll();
-            expect(game.getFrame().getRollByIndex(2)).to.be.within(0, 1);
+            expect(game.getFrame(1).getRollByIndex(2)).to.be.within(0, 1);
         });
     });
 });

@@ -37,7 +37,8 @@
 
         publicMethods.render = function () {
             gameView = VDGameView({
-                onRollClick: privateMethods.renderGameView,
+                onRandomRollClick: privateMethods.renderGameView,
+                onPinClick: privateMethods.renderGameView,
                 onRestartClick: privateMethods.restartGame
             });
             $el.appendChild(gameView.render());
@@ -54,13 +55,23 @@
 
         var game = VDGame();
 
-        privateMethods.onRollClick = function () {
+        privateMethods.onRandomRollClick = function () {
             if (game.isFinished()) {
                 return;
             }
             game.randomRoll();
-            if (typeof handlers.onRollClick === 'function') {
-                handlers.onRollClick();
+            if (typeof handlers.onRandomRollClick === 'function') {
+                handlers.onRandomRollClick();
+            }
+        };
+
+        privateMethods.onPinClick = function (num) {
+            if (game.isFinished()) {
+                return;
+            }
+            game.roll(num);
+            if (typeof handlers.onPinClick === 'function') {
+                handlers.onPinClick(num);
             }
         };
 
@@ -69,6 +80,7 @@
                 handlers.onRestartClick();
             }
         };
+
 
         privateMethods.renderTitle = function () {
             var $title = document.createElement('h2');
@@ -95,6 +107,9 @@
                     if (sum === VDGame.MAX_PINS) return spareText
                 };
             } else {
+                if (rollIndex === 1) {
+                    if (frame.isStrike()) return emptyText;
+                }
                 if (rollIndex === 2) {
                     if (frame.isSpare()) return spareText;
                     if (frame.isStrike()) return strikeText;
@@ -154,22 +169,37 @@
         privateMethods.renderButtons = function () {
             var $btns = document.createElement('div');
 
+            var domFragment = document.createDocumentFragment();
+            for (var i = 0, len = VDGame.MAX_PINS; i <= len; i++) {
+                var $pinBtn = document.createElement('button');
+                $pinBtn.type = 'button';
+                $pinBtn.className = 'btn btn-outline h6 mt2 mr1 fuchsia';
+                $pinBtn.textContent = i;
+                if (i > game.getFrame().getLeftPins()) {
+                    $pinBtn.disabled = true;
+                }
+                $pinBtn.addEventListener('click', privateMethods.onPinClick.bind(null, i), false);
+                domFragment.appendChild($pinBtn);
+            }
+
             var $rollBtn = document.createElement('button');
             $rollBtn.type = 'button';
-            $rollBtn.className = 'btn btn-primary mt2 bg-fuchsia';
-            $rollBtn.textContent = 'ROLL THE BALL';
+            $rollBtn.className = 'btn btn-primary mt2 mr1 bg-fuchsia';
+            $rollBtn.textContent = 'Random roll';
             if (game.isFinished()) {
                 $rollBtn.disabled = true;
             }
-            $rollBtn.addEventListener('click', privateMethods.onRollClick, false);
-            $btns.appendChild($rollBtn);
+            $rollBtn.addEventListener('click', privateMethods.onRandomRollClick, false);
+            domFragment.appendChild($rollBtn);
 
             var $restartBtn = document.createElement('button');
             $restartBtn.type = 'button';
-            $restartBtn.className = 'btn btn-outline mt2 ml2 fuchsia';
-            $restartBtn.textContent = 'RESTART';
+            $restartBtn.className = 'btn btn-outline mt2 fuchsia';
+            $restartBtn.textContent = 'Restart?';
             $restartBtn.addEventListener('click', privateMethods.onRestartClick, false);
-            $btns.appendChild($restartBtn)
+            domFragment.appendChild($restartBtn)
+
+            $btns.appendChild(domFragment);
 
             return $btns;
         };

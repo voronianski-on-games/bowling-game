@@ -87,9 +87,9 @@
         };
 
         publicMethods.roll = function (pins) {
-            privateMethods.nextFrame();
             currentFrame.roll(pins);
             privateMethods.updateFramesBonusPoints();
+            privateMethods.nextFrame();
         };
 
         publicMethods.randomRoll = function () {
