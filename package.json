@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "start": "open index.html",
     "test": "karma start --single-run --browsers Chrome"
   },
   "repository": {

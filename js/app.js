@@ -81,7 +81,6 @@
             }
         };
 
-
         privateMethods.renderTitle = function () {
             var $title = document.createElement('h2');
             $title.className = 'mb3 mt0';
@@ -229,4 +228,5 @@
     }
 
     root.VDApp = VDApp;
+
 })(this, this.VDGame);
