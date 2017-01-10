@@ -1,6 +1,6 @@
 # Bowling Game Puzzle
 
-[![build status](http://img.shields.io/travis/voronianski/bowling-game.svg?style=flat)](https://travis-ci.org/voronianski/bowling-game)
+[![build status](http://img.shields.io/travis/voronianski-on-games/bowling-game.svg?style=flat)](https://travis-ci.org/voronianski-on-games/bowling-game)
 
 ![](https://raw.githubusercontent.com/voronianski/bowling-game/master/demo.gif)
 
